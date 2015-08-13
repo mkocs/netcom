@@ -50,18 +50,19 @@ int main(int argc, char * argv[])
       printf("Client (%s) connected!\n", inet_ntoa(address.sin_addr));
       do
       {
-        printf("Enter a return/welcome message: ");
-        fgets(buffer, BUF, stdin);
-        send(new_socket, buffer, strlen(buffer), 0);
-        size = recv(new_socket, buffer, BUF-1, 0);
+        size = recv(new_socket, buffer, BUF-1, MSG_PEEK);
         if(size > 0)
           buffer[size] = '\0';
-        printf("Received message: %s\n", buffer);
-      } while (strcmp(buffer, "/quit\n") != 0);
-      if(close(new_socket) < 0)
+        printf("%s wrote: %s", inet_ntoa(address.sin_addr), buffer);
+      } while (strcmp(buffer, "/q\n") != 0 /*as long as buffer is not /q\n */);
+      if(strcmp(buffer, "/q\n") == 0)
       {
-        printf("Could not close socket.\n");
-        return -1;
+        if(close(new_socket) < 0)
+        {
+          printf("Could not close socket.\n");
+          return -1;
+        }
+        break;
       }
     }
   }
