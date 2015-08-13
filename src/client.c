@@ -33,19 +33,17 @@ int main (int argc, char **argv) {
   address.sin_port = htons (PORT);
   inet_aton (argv[1], &address.sin_addr);
   if (connect(conn_socket,(struct sockaddr *) &address, sizeof (address)) == 0)
-    printf ("Verbindung mit dem Server (%s) hergestellt\n", inet_ntoa (address.sin_addr));
+    printf ("Connected to (%s) ...\n", inet_ntoa (address.sin_addr));
   do {
-      size = recv(conn_socket, buffer, BUF-1, 0);
-      if(size > 0)
-         buffer[size] = '\0';
-      printf ("Received message:: %s\n", buffer);
-      if (strcmp (buffer, "/quit\n"))
-      {
-         printf ("Enter an answer message: ");
-         fgets (buffer, BUF, stdin);
-         send(conn_socket, buffer, strlen (buffer), 0);
-       }
-  } while (strcmp (buffer, "/quit\n") != 0);
+    printf ("> ");
+    fgets (buffer, BUF, stdin);
+    if(strcmp(buffer, "/q\n") == 0)
+    {
+      close(conn_socket);
+      return -1;
+    }
+    send(conn_socket, buffer, strlen (buffer), 0);
+  } while (strcmp (buffer, "/q\n") != 0);
   close (conn_socket);
   return 0;
 }
