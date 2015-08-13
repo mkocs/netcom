@@ -1,2 +1,4 @@
 build/
 netcom
+ncomclient
+ncomserver

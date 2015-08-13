@@ -20,7 +20,9 @@ all: netcom
 
 # Creates the final programm from the object files in build
 netcom: $(OBJ)
-	$(CC) -o $@ $^
+	$(CC) -o ncomclient $(SRCDIR)/client.c
+	$(CC) -o ncomserver $(SRCDIR)/server.c
+
 
 # Creates all object files in build from the .cc files in src
 $(OBJDIR)/%.o: $(SRCDIR)/%.c $(OBJDIR)/.dirstamp
@@ -31,6 +33,14 @@ $(OBJDIR)/.dirstamp:
 	mkdir -p $(OBJDIR)
 	touch $@
 
+client:
+	$(CC) -o ncomclient $(SRCDIR)/client.c
+
+server:
+	$(CC) -o ncomserver $(SRCDIR)/server.c
+
 # Cleans the build directory and removes the programm
 clean:
 	rm -rf $(OBJDIR) netcom
+	rm ncomclient
+	rm ncomserver
