@@ -37,11 +37,6 @@ int main (int argc, char **argv) {
   do {
     printf ("> ");
     fgets (buffer, BUF, stdin);
-    if(strcmp(buffer, "/q\n") == 0)
-    {
-      close(conn_socket);
-      return -1;
-    }
     send(conn_socket, buffer, strlen (buffer), 0);
   } while (strcmp (buffer, "/q\n") != 0);
   close (conn_socket);
