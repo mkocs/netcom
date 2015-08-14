@@ -50,20 +50,14 @@ int main(int argc, char * argv[])
       printf("Client (%s) connected!\n", inet_ntoa(address.sin_addr));
       do
       {
-        size = recv(new_socket, buffer, BUF-1, MSG_PEEK);
+        //size = recv(new_socket, buffer, BUF-1, 0);
+        size = read(new_socket, buffer, BUF-1);
         if(size > 0)
           buffer[size] = '\0';
-        printf("%s wrote: %s", inet_ntoa(address.sin_addr), buffer);
-      } while (strcmp(buffer, "/q\n") != 0 /*as long as buffer is not /q\n */);
-      if(strcmp(buffer, "/q\n") == 0)
-      {
-        if(close(new_socket) < 0)
-        {
-          printf("Could not close socket.\n");
-          return -1;
-        }
-        break;
-      }
+          printf("%s wrote: %s", inet_ntoa(address.sin_addr), buffer);
+      } while (strcmp(buffer, "/q\n") != 0/*as long as buffer is not /q\n */);
+      printf("%s disconnected.", inet_ntoa(address.sin_addr));
+      close(new_socket);
     }
   }
   if(close(conn_socket) < 0)
