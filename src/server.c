@@ -35,7 +35,7 @@ int main(int argc, char * argv[])
     return -1;
   }
   // start listening on the socket
-  if(listen(conn_socket, 5/*accept 5 connection*/) < 0)
+  if(listen(conn_socket, 5/*accept 5 connections*/) < 0)
   {
     printf("Could not start listening.\n");
     return -1;
