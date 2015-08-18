@@ -70,7 +70,7 @@ int main (int argc, char **argv) {
     printf ("> ");
     fgets (buffer, BUF, stdin);
     send(conn_socket, buffer, strlen (buffer), 0);
-  } while (strcmp (buffer, "/q\n") != 0);
+  } while (strcmp (buffer, quit_str) != 0);
   close (conn_socket);
   return 0;
 }
