@@ -26,7 +26,7 @@ int main(int argc, char * argv[])
   setsockopt(conn_socket, SOL_SOCKET, SO_REUSEADDR, &y, sizeof(int));
   // address configuration
   address.sin_family = AF_INET;
-  address.sin_addr.s_addr = inet_addr("127.0.0.1");
+  address.sin_addr.s_addr = INADDR_ANY;
   address.sin_port = htons(PORT);
   // bind the socket to address and port
   if(bind(conn_socket, (struct sockaddr *) &address, sizeof(address)) < 0)
