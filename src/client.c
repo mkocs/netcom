@@ -52,7 +52,7 @@ int main (int argc, char **argv) {
     return 0;
   }
 
-  int conn_socket;
+  // conn_socket defined in header
   char *buffer = malloc (BUF);
   struct sockaddr_in address;
   int size;
