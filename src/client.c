@@ -11,6 +11,7 @@
 #define BUF 1024
 
 const char quit_str[4] = "/q\n";
+int conn_socket;
 
 void ctrl_sig_handler (int sig)
 {
