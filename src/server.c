@@ -9,6 +9,8 @@
 #include <string.h>
 #define BUF 1024
 
+const char quit_str[4] = "/q\n";
+
 int main(int argc, char * argv[])
 {
   int conn_socket, new_socket;
@@ -54,9 +56,14 @@ int main(int argc, char * argv[])
         size = read(new_socket, buffer, BUF-1);
         if(size > 0)
           buffer[size] = '\0';
-          printf("%s wrote: %s", inet_ntoa(address.sin_addr), buffer);
-      } while (strcmp(buffer, "/q\n") != 0/*as long as buffer is not /q\n */);
-      printf("%s disconnected.", inet_ntoa(address.sin_addr));
+          if(strncmp(buffer, quit_str, sizeof(&buffer)) != 0 &&
+            strncmp(buffer, "", sizeof(&buffer)) != 0 &&
+            strncmp(buffer, "\n", sizeof(&buffer)) != 0)
+          {
+            printf("%s wrote: %s", inet_ntoa(address.sin_addr), buffer);
+          }
+      } while (strcmp(buffer, quit_str) != 0/*as long as buffer is not /q\n */);
+      printf("%s disconnected.\n", inet_ntoa(address.sin_addr));
       close(new_socket);
     }
   }
