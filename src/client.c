@@ -7,8 +7,40 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
+#include <signal.h>
 #define BUF 1024
+
+const char quit_str[4] = "/q\n";
+
+void ctrl_sig_handler (int sig)
+{
+  char c;
+  signal(sig, SIG_IGN);
+  printf("Do you really want to quit? [y/n] ");
+  c = getchar();
+  if (c == 'y' || c == 'Y')
+  {
+    // send the quit string to the server to terminate the connection
+    send(conn_socket, quit_str, strlen (quit_str), 0);
+    exit(0);
+  }
+  else
+  {
+    signal(SIGINT, ctrl_sig_handler);
+  }
+  getchar(); // Get new line character
+}
+
 int main (int argc, char **argv) {
+  // signal function sets a function to handle signal i.e.
+  // a signal handler with signal number sig.
+  //
+  // SIGINT = (Signal Illegal Instruction) Invalid function
+  // image, such as an illegal instruction. This is generally
+  // due to a corruption in the code or to an attempt to
+  // execute data.
+  signal(SIGINT, ctrl_sig_handler);
+
   if(argc < 2){
      printf("Usage: %s <server address>\n", *argv);
      return -1;
