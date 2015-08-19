@@ -10,8 +10,13 @@
 #include <signal.h>
 #define BUF 1024
 
+// Constant quit string
+// which indicates the end of the connection
+// if sent
 const char quit_str[4] = "/q\n";
 int conn_socket;
+// Constant version number
+const char v_num[] = "0.1";
 
 // functions to handle the ctrl-c
 // signal
@@ -59,18 +64,21 @@ int main (int argc, char **argv) {
   // If it is, continue.
   // Otherwise print a message explaining how
   // to use the client
-  if(argc < 2) {
+  if (argc < 2) {
      printf("Usage: %s <server address>\n", *argv);
      return -1;
   }
   // Check if the second parameter is --help, -h, -a or empty
   // If it is --help or -h, print the usage text.
   // If it is -a, it expects an address as the next parameter
-  if(strcmp(argv[1],"--help") == 0 || strcmp(argv[1], "-h") == 0) {
+  if (strncmp(argv[1],"--help", sizeof(&argv[1])) == 0 || strncmp(argv[1], "-h", sizeof(&argv[1])) == 0) {
     print_usagemsg(*argv);
     return 0;
-  } else if(strcmp(argv[1], "-a") == 0 && argc >= 3) {
+  } else if (strncmp(argv[1], "-a", sizeof(&argv[1])) == 0 && argc >= 3) {
     host_address = argv[2];
+  } else if (strncmp(argv[1], "-v", sizeof(&argv[1])) == 0 || strncmp(argv[1], "--version", sizeof(&argv[1])) == 0) {
+    printf("Version number: %s\n", v_num);
+    return 0;
   } else {
     host_address = argv[1];
   }

@@ -13,9 +13,20 @@
 // which indicates the end of a connection
 // if received
 const char quit_str[4] = "/q\n";
+// Constant version number
+const char v_num[] = "0.1";
 
 int main(int argc, char * argv[])
 {
+  // Check if there are 2 or more arguments.
+  // If there are, check if the 2nd argument is
+  // -v or --version and print the version number.
+  if (argc >= 2) {
+    if (strncmp(argv[1], "-v", sizeof(&argv[1])) == 0 || strncmp(argv[1], "--version", sizeof(&argv[1])) == 0) {
+      printf("Version number: %s\n", v_num);
+      return 0;
+    }
+  }
   // 2 Socket connections represented by integer values
   // The first one is the overall connection the server listens
   // on for new connecting clients.
@@ -45,7 +56,7 @@ int main(int argc, char * argv[])
   // will exit.
   // If successful, the socket functions assigns an integer value to
   // conn_socket, which will represent the socket.
-  if((conn_socket = socket(AF_INET, SOCK_STREAM, 0)) < 0) {
+  if ((conn_socket = socket(AF_INET, SOCK_STREAM, 0)) < 0) {
     printf("Could not create socket.\n");
     return -1;
   }
@@ -67,13 +78,13 @@ int main(int argc, char * argv[])
   // Bind conn_socket to address and port
   // If a negative value is returned, an
   // error will be printed and the program will exit.
-  if(bind(conn_socket, (struct sockaddr *) &address, sizeof(address)) < 0) {
+  if (bind(conn_socket, (struct sockaddr *) &address, sizeof(address)) < 0) {
     printf("Could not bind socket. Port may be in use.\n");
     return -1;
   }
   // Start listening on the connection socket
   // and await connecting clients
-  if(listen(conn_socket, 5/*accept up to 5 connections*/) < 0) {
+  if (listen(conn_socket, 5/*accept up to 5 connections*/) < 0) {
     printf("Could not start listening.\n");
     return -1;
   }
@@ -85,9 +96,9 @@ int main(int argc, char * argv[])
   // Each time going through the loop, a new socket will be created
   // and if there is a value bigger than 0 assigned to it, there
   // is a new connection on this socket, which is represented by this integer value.
-  while(1) {
+  while (1) {
     new_socket = accept(conn_socket, (struct sockaddr *) &address, &addrlen);
-    if(new_socket > 0) {
+    if (new_socket > 0) {
       printf("Client (%s) connected!\n", inet_ntoa(address.sin_addr));
       // This inner loop sort of represents the
       // connection to the user on the new_socket.
@@ -100,7 +111,7 @@ int main(int argc, char * argv[])
         // If the size if bigger than 0, data/a message has
         // arrived and will be printed (with a few exceptions)
         size = read(new_socket, buffer, BUF-1);
-        if(size > 0) {
+        if (size > 0) {
           // Add a \0 termination string at the end of
           // the buffer.
           buffer[size] = '\0';
@@ -110,7 +121,7 @@ int main(int argc, char * argv[])
           // has ended.
           // This is necessary bceause the size check doesn't prevent empty
           // messages to be printed.
-          if(strncmp(buffer, quit_str, sizeof(&buffer)) != 0 &&
+          if (strncmp(buffer, quit_str, sizeof(&buffer)) != 0 &&
             strncmp(buffer, "", sizeof(&buffer)) != 0 &&
             strncmp(buffer, "\n", sizeof(&buffer)) != 0) {
             printf("%s wrote: %s", inet_ntoa(address.sin_addr), buffer);
