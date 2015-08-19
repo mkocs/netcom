@@ -1,5 +1,4 @@
 # netcom
-==
 
 # About
 Netcom attempts to be an easy-to-use in-network communication solution for UNIX (primary target Linux). The idea came up when I was testing Ethernet ports with a colleague and we had no way to easily communicate, sitting in different rooms.
