@@ -39,7 +39,15 @@ void ctrl_sig_handler (int sig)
   getchar(); // Get new line character
 }
 
+// Function to print a message to explain
+// the usage of the application to the user
+void print_usagemsg(char prim_arg[])
+{
+  printf("Usage: %s [-a <server address>]\nCommands:\n\t/q ... quit\n", prim_arg);
+}
+
 int main (int argc, char **argv) {
+  char* host_address;
   // signal function sets a function to handle signal i.e.
   // a signal handler with signal number sig.
   //
