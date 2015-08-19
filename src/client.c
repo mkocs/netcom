@@ -128,7 +128,7 @@ int main (int argc, char **argv) {
   do {
     printf ("> ");
     fgets (buffer, BUF, stdin);
-    send(conn_socket, buffer, strlen (buffer), 0);
+    write(conn_socket, buffer, strlen (buffer));
   } while (strcmp (buffer, quit_str) != 0);
   close (conn_socket);
   return 0;
