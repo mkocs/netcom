@@ -26,14 +26,11 @@ void ctrl_sig_handler (int sig)
   signal(sig, SIG_IGN);
   printf("Do you really want to quit? [y/n] ");
   c = getchar();
-  if (c == 'y' || c == 'Y')
-  {
+  if (c == 'y' || c == 'Y') {
     // send the quit string to the server to terminate the connection
     send(conn_socket, quit_str, strlen (quit_str), 0);
     exit(0);
-  }
-  else
-  {
+  } else {
     signal(SIGINT, ctrl_sig_handler);
   }
   getchar(); // Get new line character
@@ -62,24 +59,19 @@ int main (int argc, char **argv) {
   // If it is, continue.
   // Otherwise print a message explaining how
   // to use the client
-  if(argc < 2){
+  if(argc < 2) {
      printf("Usage: %s <server address>\n", *argv);
      return -1;
   }
   // Check if the second parameter is --help, -h, -a or empty
   // If it is --help or -h, print the usage text.
   // If it is -a, it expects an address as the next parameter
-  if(strcmp(argv[1],"--help") == 0 || strcmp(argv[1], "-h") == 0)
-  {
+  if(strcmp(argv[1],"--help") == 0 || strcmp(argv[1], "-h") == 0) {
     print_usagemsg(*argv);
     return 0;
-  }
-  else if(strcmp(argv[1], "-a") == 0 && argc >= 3)
-  {
+  } else if(strcmp(argv[1], "-a") == 0 && argc >= 3) {
     host_address = argv[2];
-  }
-  else
-  {
+  } else {
     host_address = argv[1];
   }
 
@@ -99,8 +91,7 @@ int main (int argc, char **argv) {
   // will exit.
   // If successful, the socket functions assigns an integer value to
   // conn_socket, which will represent the socket.
-  if ((conn_socket= socket(AF_INET, SOCK_STREAM, 0)) < 0)
-  {
+  if ((conn_socket= socket(AF_INET, SOCK_STREAM, 0)) < 0) {
     printf("Could not create socket.\n");
     return -1;
   }

@@ -45,8 +45,7 @@ int main(int argc, char * argv[])
   // will exit.
   // If successful, the socket functions assigns an integer value to
   // conn_socket, which will represent the socket.
-  if((conn_socket = socket(AF_INET, SOCK_STREAM, 0)) < 0)
-  {
+  if((conn_socket = socket(AF_INET, SOCK_STREAM, 0)) < 0) {
     printf("Could not create socket.\n");
     return -1;
   }
@@ -68,15 +67,13 @@ int main(int argc, char * argv[])
   // Bind conn_socket to address and port
   // If a negative value is returned, an
   // error will be printed and the program will exit.
-  if(bind(conn_socket, (struct sockaddr *) &address, sizeof(address)) < 0)
-  {
+  if(bind(conn_socket, (struct sockaddr *) &address, sizeof(address)) < 0) {
     printf("Could not bind socket. Port may be in use.\n");
     return -1;
   }
   // Start listening on the connection socket
   // and await connecting clients
-  if(listen(conn_socket, 5/*accept up to 5 connections*/) < 0)
-  {
+  if(listen(conn_socket, 5/*accept up to 5 connections*/) < 0) {
     printf("Could not start listening.\n");
     return -1;
   }
@@ -88,24 +85,22 @@ int main(int argc, char * argv[])
   // Each time going through the loop, a new socket will be created
   // and if there is a value bigger than 0 assigned to it, there
   // is a new connection on this socket, which is represented by this integer value.
-  while(1){
+  while(1) {
     new_socket = accept(conn_socket, (struct sockaddr *) &address, &addrlen);
-    if(new_socket > 0)
-    {
+    if(new_socket > 0) {
       printf("Client (%s) connected!\n", inet_ntoa(address.sin_addr));
       // This inner loop sort of represents the
       // connection to the user on the new_socket.
       // As long as the server doesn't receive a quit string (/q\n)
       // from the user, this inner loop will execute.
-      do
-      {
+      do {
         // The length of the (possibly) received data
         // returned by the read() function is assigned to
         // the size variable.
         // If the size if bigger than 0, data/a message has
         // arrived and will be printed (with a few exceptions)
         size = read(new_socket, buffer, BUF-1);
-        if(size > 0)
+        if(size > 0) {
           // Add a \0 termination string at the end of
           // the buffer.
           buffer[size] = '\0';
@@ -117,10 +112,10 @@ int main(int argc, char * argv[])
           // messages to be printed.
           if(strncmp(buffer, quit_str, sizeof(&buffer)) != 0 &&
             strncmp(buffer, "", sizeof(&buffer)) != 0 &&
-            strncmp(buffer, "\n", sizeof(&buffer)) != 0)
-          {
+            strncmp(buffer, "\n", sizeof(&buffer)) != 0) {
             printf("%s wrote: %s", inet_ntoa(address.sin_addr), buffer);
           }
+        }
       } while (strcmp(buffer, quit_str) != 0/*as long as buffer is not /q\n */);
       printf("%s disconnected.\n", inet_ntoa(address.sin_addr));
       close(new_socket);
