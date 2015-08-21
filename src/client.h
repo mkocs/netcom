@@ -1,3 +1,2 @@
-static int const PORT = 7891;
-
+int cli_init(char *host_address);
 void ctrl_sig_handler(int);

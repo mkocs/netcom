@@ -1,4 +1,5 @@
 #include "server.h"
+#include "net.h"
 #include <sys/types.h>
 #include <sys/socket.h>
 #include <netinet/in.h>
@@ -9,24 +10,8 @@
 #include <string.h>
 #define BUF 1024
 
-// Constant quit string
-// which indicates the end of a connection
-// if received
-const char quit_str[4] = "/q\n";
-// Constant version number
-const char v_num[] = "0.1";
-
-int main(int argc, char * argv[])
+int srv_init(void)
 {
-  // Check if there are 2 or more arguments.
-  // If there are, check if the 2nd argument is
-  // -v or --version and print the version number.
-  if (argc >= 2) {
-    if (strncmp(argv[1], "-v", sizeof(&argv[1])) == 0 || strncmp(argv[1], "--version", sizeof(&argv[1])) == 0) {
-      printf("Version number: %s\n", v_num);
-      return 0;
-    }
-  }
   // 2 Socket connections represented by integer values
   // The first one is the overall connection the server listens
   // on for new connecting clients.
@@ -74,7 +59,9 @@ int main(int argc, char * argv[])
   // and set the host address to INADDR_ANY
   address.sin_family = AF_INET;
   address.sin_addr.s_addr = INADDR_ANY;
+  //printf("%u", INADDR_ANY);
   address.sin_port = htons(PORT);
+
   // Bind conn_socket to address and port
   // If a negative value is returned, an
   // error will be printed and the program will exit.
@@ -89,8 +76,6 @@ int main(int argc, char * argv[])
     return -1;
   }
   printf("Listening on port %d...\n", PORT);
-  // store the length of an address
-  addrlen = sizeof(struct sockaddr_in);
   // Infinite loop to always await connections
   // and listen.
   // Each time going through the loop, a new socket will be created
