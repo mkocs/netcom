@@ -1,4 +1,5 @@
 #include "client.h"
+#include "net.h"
 #include <sys/types.h>
 #include <sys/socket.h>
 #include <netinet/in.h>
@@ -10,13 +11,7 @@
 #include <signal.h>
 #define BUF 1024
 
-// Constant quit string
-// which indicates the end of the connection
-// if sent
-const char quit_str[4] = "/q\n";
 int conn_socket;
-// Constant version number
-const char v_num[] = "0.1";
 
 // functions to handle the ctrl-c
 // signal
@@ -41,15 +36,7 @@ void ctrl_sig_handler (int sig)
   getchar(); // Get new line character
 }
 
-// Function to print a message to explain
-// the usage of the application to the user
-void print_usagemsg(char prim_arg[])
-{
-  printf("Usage: %s [-a <server address>]\nCommands:\n\t/q ... quit\n", prim_arg);
-}
-
-int main (int argc, char **argv) {
-  char* host_address;
+int cli_init (char host_address[]) {
   // signal function sets a function to handle signal i.e.
   // a signal handler with signal number sig.
   //
@@ -58,30 +45,6 @@ int main (int argc, char **argv) {
   // due to a corruption in the code or to an attempt to
   // execute data.
   signal(SIGINT, ctrl_sig_handler);
-
-  // Check if there are enough arguments to run the
-  // client.
-  // If it is, continue.
-  // Otherwise print a message explaining how
-  // to use the client
-  if (argc < 2) {
-     printf("Usage: %s <server address>\n", *argv);
-     return -1;
-  }
-  // Check if the second parameter is --help, -h, -a or empty
-  // If it is --help or -h, print the usage text.
-  // If it is -a, it expects an address as the next parameter
-  if (strncmp(argv[1],"--help", sizeof(&argv[1])) == 0 || strncmp(argv[1], "-h", sizeof(&argv[1])) == 0) {
-    print_usagemsg(*argv);
-    return 0;
-  } else if (strncmp(argv[1], "-a", sizeof(&argv[1])) == 0 && argc >= 3) {
-    host_address = argv[2];
-  } else if (strncmp(argv[1], "-v", sizeof(&argv[1])) == 0 || strncmp(argv[1], "--version", sizeof(&argv[1])) == 0) {
-    printf("Version number: %s\n", v_num);
-    return 0;
-  } else {
-    host_address = argv[1];
-  }
 
   // buffer contains the data that is to be
   // sent to the server

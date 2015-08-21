@@ -1,1 +1,1 @@
-static int const PORT = 7891;
+int srv_init(void);
