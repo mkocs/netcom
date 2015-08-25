@@ -10,14 +10,16 @@
 #include <string.h>
 #define BUF 1024
 
+int conn_socket;
+
 int srv_init(void)
 {
-  // 2 Socket connections represented by integer values
+  // 2 Socket connections (including conn_socket above) represented by integer values
   // The first one is the overall connection the server listens
   // on for new connecting clients.
   // The second one is assigned, when a user connects,
   // so the server is able to listen to the user's communication.
-  int conn_socket, new_socket;
+  int new_socket;
   // Address struct, storing addressing information
   struct sockaddr_in address;
   socklen_t addrlen;
@@ -117,5 +119,12 @@ int srv_init(void)
       close(new_socket);
     }
   }
+  return 0;
+}
+
+int srv_close(void)
+{
+  printf("Closing server...\n");
+  close(conn_socket);
   return 0;
 }

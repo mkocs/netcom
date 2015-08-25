@@ -56,7 +56,10 @@ int main(int argc, char **argv)
     }
   }
   if (run_cli) {
-    cli_init(host_addr);
+    if (cli_init(host_addr) != 0) {
+      srv_close();
+      return -1;
+    }
   }
   return 0;
 }
