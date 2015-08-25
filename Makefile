@@ -35,5 +35,3 @@ $(OBJDIR)/.dirstamp:
 # Cleans the build directory and removes the programm
 clean:
 	rm -rf $(OBJDIR) netcom
-	rm ncomclient
-	rm ncomserver
